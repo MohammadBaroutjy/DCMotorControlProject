@@ -17,10 +17,10 @@ namespace DCMotorControlApp
             builder.Services.AddSingleton<IMotorBluetoothService, MotorBluetoothService>();
             builder.Services.AddMauiBlazorWebView();
 
-#if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
-#endif
+        #if DEBUG
+        		builder.Services.AddBlazorWebViewDeveloperTools();
+        		builder.Logging.AddDebug();
+        #endif
 
             return builder.Build();
         }

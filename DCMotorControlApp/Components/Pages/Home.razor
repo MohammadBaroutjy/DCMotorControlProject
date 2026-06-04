@@ -5,35 +5,48 @@
 @implements IDisposable
 
 <div class="motor-dashboard">
-    <h3 class="dashboard-title">StitchX Control Station</h3>
+    <h3 class="dashboard-title">مشروع التحكم بالمحرك</h3>
 
     <div class="panel connection-panel">
         <div class="status-indicator">
-            <span class="dot @(BluetoothService.IsConnected ? "online" : "offline")"></span>
-            <span class="status-text">@(BluetoothService.IsConnected ? "CONNECTED" : "DISCONNECTED")</span>
+            @if (BluetoothService.IsConnecting)
+            {
+                <span class="dot connecting"></span>
+                <span class="status-text">يتصل بـ  @BluetoothService.ConnectingDeviceName...</span>
+            }
+            else if (BluetoothService.IsConnected)
+            {
+                <span class="dot online"></span>
+                <span class="status-text">متصل بـ @BluetoothService.ConnectingDeviceName</span>
+            }
+            else
+            {
+                <span class="dot offline"></span>
+                <span class="status-text">غير متصل</span>
+            }
         </div>
 
-        @if (!BluetoothService.IsConnected)
+        @if (!BluetoothService.IsConnected && !BluetoothService.IsConnecting)
         {
             <button class="btn btn-scan" @onclick="ScanDevices" disabled="@BluetoothService.IsScanning">
-                @(BluetoothService.IsScanning ? "Scanning..." : "Scan for ESP32")
+                @(BluetoothService.IsScanning ? "جاري البحث..." : "البحث عن ESP32")
             </button>
 
-            @if (BluetoothService.DiscoveredDevices.Any())
+            @if (BluetoothService.DiscoveredDeviceNames.Any())
             {
                 <div class="device-list">
-                    @foreach (var device in BluetoothService.DiscoveredDevices)
+                    @foreach (var device in BluetoothService.DiscoveredDeviceNames)
                     {
                         <div class="device-item" @onclick="() => ConnectToDevice(device)">
-                            📱 @device <span class="connect-link">Connect</span>
+                            📱 @device <span class="connect-link">اتصال</span>
                         </div>
                     }
                 </div>
             }
         }
-        else
+        else if (BluetoothService.IsConnected)
         {
-            <button class="btn btn-disconnect" @onclick="DisconnectDevice">Disconnect Device</button>
+            <button class="btn btn-disconnect" @onclick="DisconnectDevice">الغاء الاتصال</button>
         }
     </div>
 
@@ -41,13 +54,14 @@
         
         <div class="section-title">Direction System</div>
         <div class="direction-grid">
-            <button class="btn btn-dir btn-forward" @onclick='() => SendDirection("F")'>Forward ↻</button>
+            <button class="btn btn-dir btn-forward" @onclick='() => SendDirection("F")'>Forward</button>
             <button class="btn btn-dir btn-stop" @onclick='() => SendDirection("S")'>STOP 🛑</button>
-            <button class="btn btn-dir btn-backward" @onclick='() => SendDirection("B")'>Backward ↺</button>
+            <button class="btn btn-dir btn-backward" @onclick='() => SendDirection("B")'>Backward</button>
         </div>
 
-        <div class="section-title" style="margin-top: 25px;">Speed Selector (PWM)</div>
+        <div class="section-title" style="margin-top: 25px;">اختر السرعة (PWM)</div>
         <div class="speed-grid">
+            <button class="btn btn-speed" @onclick='() => SendSpeed("1")'>10%</button>
             <button class="btn btn-speed" @onclick='() => SendSpeed("3")'>30%</button>
             <button class="btn btn-speed" @onclick='() => SendSpeed("6")'>60%</button>
             <button class="btn btn-speed" @onclick='() => SendSpeed("9")'>90%</button>
@@ -87,7 +101,7 @@
         await BluetoothService.SendCommandAsync(speedCode);
     }
 
-    private void OnServicePropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void OnServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
     }
