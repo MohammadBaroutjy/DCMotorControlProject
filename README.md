@@ -1,4 +1,4 @@
-# DC Motor Control App
+# DC Motor Control Project
 
 A comprehensive application for controlling DC motors with microcontroller support, built with C++ and Arduino.
 
@@ -11,7 +11,7 @@ This project provides a complete solution for DC motor control, combining a C++ 
 ```
 DCMotorControlApp/
 ├── DCMotorControl.slnx          # Solution file for Visual Studio
-├── DCMotorControlApp/           # Main application folder
+├── DCMotorControlProject/           # Main application folder
 ├── dc-motor-control.ino         # Arduino firmware for motor control
 ├── .gitattributes              # Git attributes configuration
 ├── .gitignore                  # Git ignore rules
@@ -37,7 +37,7 @@ DCMotorControlApp/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/MohammadBaroutjy/DCMotorControlApp.git
+   git clone https://github.com/MohammadBaroutjy/DCMotorControlProject.git
    cd DCMotorControlApp
    ```
 
@@ -107,7 +107,7 @@ Contributions are welcome! Feel free to:
 
 ## 📞 Support
 
-For questions or issues, please open an issue on the [GitHub repository](https://github.com/MohammadBaroutjy/DCMotorControlApp/issues).
+For questions or issues, please open an issue on the [GitHub repository](https://github.com/MohammadBaroutjy/DCMotorControlProject/issues).
 
 ---
 
